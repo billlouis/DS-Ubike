@@ -25,14 +25,17 @@ void basic(string selectedCase){
 
     ifstream myFile(path);
     if(myFile.is_open()){
+        //Take discount value
         getline(myFile,line);
         disc_price = stod(line);
         cout << disc_price << endl;
+        //Take rental limit
         getline(myFile,line);
         rental_limit = stoi(line);
         cout << rental_limit << endl;
+        
         while(getline(myFile,line)){
-          //  cout << line << endl;
+            cout << line << endl;
         }
         myFile.close();
     }
