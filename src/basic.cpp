@@ -2,8 +2,9 @@
 #include <fstream>
 #include <string>
 #include "./vector.cpp"
+#include "./graph.h"
 #include <sstream>
-#include <vector>
+
 class bike{
     private :
         int initial_price;
@@ -35,7 +36,8 @@ void basic(string selectedCase){
     
     double disc_price;
     int rental_limit;
-    int m = 10000, n = 10000;
+    int vertices_count = 0;
+    int m = 1001, n = 1001;
     int** map = new int*[m];
     for (int i = 0; i < m; i++) {
         map[i] = new int[n];
@@ -60,17 +62,20 @@ void basic(string selectedCase){
                 if(line[0] == 'S' && tmp_count < 2){
                     if(tmp_count == 0){
                         station1 = stoi(line.substr(1));
+                        if (station1 > vertices_count)vertices_count = station1;
                         tmp_count++;
                         cout << "s1:" << station1 << " ";
                     }
                     else if(tmp_count == 1){
                         station2 = stoi(line.substr(1));
+                        if (station2 > vertices_count)vertices_count = station2;
                         tmp_count++;
                         cout << "s2:" << station2 << " " ;
                     }
                 }
                 else {
                     map[station1][station2] = stoi(line);
+                    map[station2][station1] = stoi(line);
                     tmp_count = 0;
                     cout << "distance:" << map[station1][station2] << endl;
                 }
@@ -78,8 +83,9 @@ void basic(string selectedCase){
         }
         maps.close();
     }
-    else cout << "gada cok" << endl;   
-
+    else cout << "gada cok" << endl;
+    vertices_count++;   
+    dijkstra(map,0,vertices_count);
     if(bike_info.is_open()){
         //Take discount value
         getline(bike_info,line);
