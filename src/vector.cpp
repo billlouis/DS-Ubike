@@ -1,10 +1,4 @@
-#include "vector.h"
-template <class T>
-vectors<T> ::vectors(){
-    arr = new T[1];
-    capacity = 1;
-    size = 0;
-}
+#include "./vector.h"
 template <class T>
 vectors<T> :: vectors(const vectors& rhs): size(rhs.size), capacity(rhs.capacity), arr(new T[capacity]){
     for(ll i = 0; i < rhs.Size(); i++){

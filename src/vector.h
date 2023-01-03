@@ -1,13 +1,16 @@
+#ifndef vector_h
+#define vector_h 1
 #include "iostream"
 using namespace std;
 #define ll long long
-template <typename T> class vectors {
+template <class T> 
+class vectors {
 private :
 T* arr;
-ll capacity;
-ll size;
+ll capacity = 1;
+ll size = 0;
 public :
-    vectors();
+    vectors():capacity(1),size(0),arr(new T[1]){}
     vectors(const vectors& rhs);
     void push(T data);
 
@@ -46,3 +49,4 @@ public :
     iterator begin()const;
     iterator end()const;
 };
+#endif
