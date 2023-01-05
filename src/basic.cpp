@@ -1,12 +1,12 @@
 #include "./nthu_bike.h"
 #include <fstream>
 #include <string>
-#include "./vector2.cpp"
+#include "./vectors.h"
 #include "./graph.h"
 #include <sstream>
 #include "./bike.h"
 #include <iostream>
-#include "./user.h"
+//#include "./user.h"
 
 void basic(string selectedCase){
     
@@ -149,7 +149,23 @@ void basic(string selectedCase){
             usr[usr.Size()-1].bike_want = usr_temp.bike_want;
         }
     }
-    
+    mergeSortUser(usr,0,usr.Size()-1);
+    //   for(int i = 0; i < usr.Size()-1; i++){
+    //       cout << usr[i].start_time << " " << usr[i].id << endl;
+    //   }
+    for(int i = 0; i < usr.Size()-1; i++){
+        for(int j = 0; j < usr[i].bike_want.Size()-1; j++){
+            int bike = usr[i].bike_want[j];
+            for(int k = 0; k < sepeda[bike].Size()-1; k++){
+                if (sepeda[bike][k].station == usr[i].src && 
+                sepeda[bike][k].available_time < usr[i].start_time
+                && sepeda[bike][k].rental_count < rental_limit
+                && sepeda[bike][k].rental_price > 0 ){
+                    
+                }
+            }
+        }
+    }
     // for(int i = 0; i <2 ;i ++){
     //     for(int j =0; j < sepeda[i].Size(); j++){
     //         cout << sepeda[i][j].type << " " <<

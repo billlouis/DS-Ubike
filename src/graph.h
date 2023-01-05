@@ -2,7 +2,8 @@
 #define graph_h 1
 #include "iostream"
 using namespace std;
-
+#include "./vectors.h"
+#include "./user.h"
 struct Edge {
     int src, dest, weight;
     };
@@ -24,4 +25,6 @@ int* dijkstra(int **graph, int src, int V);
 void printSolution(int ** dist, int V);
 void floydWarshall(int ** dist, int V);
 int minDistance(int dist[], bool sptSet[], int V);
+void mergeUser(vectors<User> &vec, int front, int mid, int end);
+void mergeSortUser(vectors<User> &vec, int front, int end);
 #endif

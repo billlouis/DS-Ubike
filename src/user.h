@@ -1,4 +1,5 @@
-#include "./vector2.h"
+#include "./vectors.h"
+
 class User{
 
     public :
@@ -9,7 +10,8 @@ class User{
         int src;
         int dest;
     public :
-        User():id(0),start_time(0),end_time(0),src(0),dest(0) {}
+        User():id(0),start_time(0),end_time(0),src(0),dest(0) {
+        }
         User(int uid, int st, int et, int src, int destination);
 
 

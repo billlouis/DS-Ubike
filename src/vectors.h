@@ -1,4 +1,38 @@
-#include "./vector2.h"
+#ifndef vectors_h
+#define vectors_h 1
+#include "iostream"
+using namespace std;
+#define ll int
+template <class T> 
+class vectors {
+private :
+T* arr;
+ll capacity = 1;
+ll size = 0;
+public :
+    vectors();
+    vectors(const vectors& rhs);
+
+    void push(T data);
+    void setMem(ll ukuran);
+    void pop();
+    ll Size() const;
+
+    T& operator[](ll);
+
+    ll getCapacity();
+    void print();
+    
+};
+
+template <class T>
+vectors<T> :: vectors():capacity(1),size(0),arr(new T[1]){}
+
+template <class T>
+void vectors<T> :: setMem(ll ukuran){
+    capacity = ukuran;
+}
+
 template <class T>
 vectors<T> :: vectors(const vectors& rhs): size(rhs.size), capacity(rhs.capacity), arr(new T[capacity]){
     for(ll i = 0; i < rhs.Size(); i++){
@@ -36,22 +70,6 @@ T& vectors<T> :: operator[](ll index){
     }
     return *(arr+index);
 }
-template <class T>
-typename vectors<T>::iterator
-vectors <T>::begin()const{
-    return iterator(arr);
-}
-template <class T>
-typename vectors<T>::iterator
-vectors<T> :: end()const{
-    return iterator(arr + size);
-}
 
-template <class T>
-void print(T& v){
-    typename T::iterator ptr;
-    for(ptr = v.begin(); ptr!= v.end(); ptr++){
-        cout << *ptr << ' ';
-    }
-    cout << '\n';
-}
+
+#endif

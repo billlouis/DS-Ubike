@@ -1,7 +1,6 @@
 #include "./graph.h"
 #include <climits>
 #include <iostream>
-#include "./user.h"
 Graph::Graph(int Vertices , int Edges){
     V = Vertices;
     E = 2*Edges; 
@@ -117,18 +116,62 @@ void printSolution(int **dist, int V)
         cout << endl;
     }
 }
-void mergeUser(vectors<User> &vec, int front, int mid, int end){
-    // vectors<User> leftSubArray;
-    // vectors<User> rightSubArray;
-    // for(int i = front; i < mid + 1; i++){
-    //     leftSubArray.push(vec[i]);
+void mergeUser(vectors<User> &vec, int left, int mid, int right){
+   
+    auto const subArrayOne = mid - left + 1;
+    auto const subArrayTwo = right - mid;
+    User* leftArray = new User[subArrayOne];
+    User* rightArray = new User[subArrayTwo];
+    for(int i = 0; i < subArrayOne; i++){
+        leftArray[i] = vec[left+i];
+    }
+    for(int i = 0; i < subArrayTwo; i++){
+        rightArray[i] = vec[mid + 1 + i];
+    }
+    // for(int i = 0; i < leftArray.Size(); i++){
+    //     cout << leftArray[i].id <<" "<< leftArray[i].start_time << endl;
     // }
-    // for(int i = mid+1; i < end+1; i++){
-    //     rightSubArray.push(vec[i]);
+    // for(int i = 0; i < rightArray.Size(); i++){
+    //     cout << rightArray[i].id <<" "<< rightArray[i].start_time << endl;
     // }
-    // int idxLeft = 0, idxRight =0;
-
-
+    // cout << leftArray.Size() << " ";
+    // cout << rightArray.Size() << endl;
+    int idxLeft = 0, idxRight =0, idxMerge = left;
+    while(idxLeft < subArrayOne && idxRight < subArrayTwo){
+        if(leftArray[idxLeft].start_time <= rightArray[idxRight].start_time){
+            if(leftArray[idxLeft].start_time == rightArray[idxRight].start_time){
+                if(leftArray[idxLeft].id < rightArray[idxRight].id){
+                   vec[idxMerge] = leftArray[idxLeft];
+                   idxLeft++;
+                }
+                else {
+                   vec[idxMerge] = rightArray[idxRight];
+                   idxRight++;
+                }
+            }
+            else {
+               vec[idxMerge] = leftArray[idxLeft];
+               idxLeft++;
+            }
+        }
+        else {
+           vec[idxMerge] = rightArray[idxRight];
+           idxRight++;
+        }
+       idxMerge++;
+    }
+    while(idxLeft<subArrayOne){
+       vec[idxMerge] = leftArray[idxLeft];
+        idxLeft++;
+        idxMerge++;
+    }
+    while(idxRight<subArrayTwo){
+       vec[idxMerge] = rightArray[idxRight];
+        idxRight++;
+        idxMerge++;
+    }
+    delete [] leftArray;
+    delete [] rightArray;
 }
 
 void mergeSortUser(vectors<User> &vec, int front, int end){
