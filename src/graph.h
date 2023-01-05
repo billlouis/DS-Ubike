@@ -4,6 +4,7 @@
 using namespace std;
 #include "./vectors.h"
 #include "./user.h"
+#include "./bike.h"
 struct Edge {
     int src, dest, weight;
     };
@@ -25,6 +26,9 @@ int* dijkstra(int **graph, int src, int V);
 void printSolution(int ** dist, int V);
 void floydWarshall(int ** dist, int V);
 int minDistance(int dist[], bool sptSet[], int V);
-void mergeUser(vectors<User> &vec, int front, int mid, int end);
+void mergeU(vectors<User> &vec, int front, int mid, int end);
+void mergeB(vectors<Bike> &vec, int front, int mid, int end);
+
 void mergeSortUser(vectors<User> &vec, int front, int end);
+void mergeSortBike(vectors<Bike> &vec, int front, int end);
 #endif

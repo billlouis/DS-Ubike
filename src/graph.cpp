@@ -116,7 +116,56 @@ void printSolution(int **dist, int V)
         cout << endl;
     }
 }
-void mergeUser(vectors<User> &vec, int left, int mid, int right){
+void mergeB(vectors<Bike> &vec, int left, int mid, int right){
+   
+    auto const subArrayOne = mid - left + 1;
+    auto const subArrayTwo = right - mid;
+    Bike* leftArray = new Bike[subArrayOne];
+    Bike* rightArray = new Bike[subArrayTwo];
+    for(int i = 0; i < subArrayOne; i++){
+        leftArray[i] = vec[left+i];
+    }
+    for(int i = 0; i < subArrayTwo; i++){
+        rightArray[i] = vec[mid + 1 + i];
+    }
+    int idxLeft = 0, idxRight =0, idxMerge = left;
+    while(idxLeft < subArrayOne && idxRight < subArrayTwo){
+        if(leftArray[idxLeft].station <= rightArray[idxRight].station){
+            if(leftArray[idxLeft].station == rightArray[idxRight].station){
+                if(leftArray[idxLeft].id < rightArray[idxRight].id){
+                   vec[idxMerge] = leftArray[idxLeft];
+                   idxLeft++;
+                }
+                else {
+                   vec[idxMerge] = rightArray[idxRight];
+                   idxRight++;
+                }
+            }
+            else {
+               vec[idxMerge] = leftArray[idxLeft];
+               idxLeft++;
+            }
+        }
+        else {
+           vec[idxMerge] = rightArray[idxRight];
+           idxRight++;
+        }
+       idxMerge++;
+    }
+    while(idxLeft<subArrayOne){
+       vec[idxMerge] = leftArray[idxLeft];
+        idxLeft++;
+        idxMerge++;
+    }
+    while(idxRight<subArrayTwo){
+       vec[idxMerge] = rightArray[idxRight];
+        idxRight++;
+        idxMerge++;
+    }
+    delete [] leftArray;
+    delete [] rightArray;
+}
+void mergeU(vectors<User> &vec, int left, int mid, int right){
    
     auto const subArrayOne = mid - left + 1;
     auto const subArrayTwo = right - mid;
@@ -173,13 +222,21 @@ void mergeUser(vectors<User> &vec, int left, int mid, int right){
     delete [] leftArray;
     delete [] rightArray;
 }
-
 void mergeSortUser(vectors<User> &vec, int front, int end){
 
     if(front >= end) return;
     int mid = (front + end) /2;
     mergeSortUser(vec, mid+1, end);
     mergeSortUser(vec, front, mid);
-    mergeUser(vec, front, mid, end);
+    mergeU(vec, front, mid, end);
+
+}
+void mergeSortBike(vectors<Bike> &vec, int front, int end){
+
+    if(front >= end) return;
+    int mid = (front + end) /2;
+    mergeSortBike(vec, mid+1, end);
+    mergeSortBike(vec, front, mid);
+    mergeB(vec, front, mid, end);
 
 }

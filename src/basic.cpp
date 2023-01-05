@@ -6,6 +6,7 @@
 #include <sstream>
 #include "./bike.h"
 #include <iostream>
+#include <climits>
 //#include "./user.h"
 
 void basic(string selectedCase){
@@ -34,6 +35,9 @@ void basic(string selectedCase){
     ifstream maps(path_map);
     ifstream users(path_user);
     ifstream bikes(path_bike);
+    ofstream outStation("result/" + selectedCase + "/station_status.txt");
+    ofstream outUser("result/" + selectedCase + "/user_result.txt");
+    ofstream outTransfer("result/" + selectedCase + "/transfer_log.txt");
    // vectors<bike> b;
     if(maps.is_open()){
         int tmp_count = 0;
@@ -150,22 +154,81 @@ void basic(string selectedCase){
         }
     }
     mergeSortUser(usr,0,usr.Size()-1);
-    //   for(int i = 0; i < usr.Size()-1; i++){
-    //       cout << usr[i].start_time << " " << usr[i].id << endl;
-    //   }
-    for(int i = 0; i < usr.Size()-1; i++){
-        for(int j = 0; j < usr[i].bike_want.Size()-1; j++){
-            int bike = usr[i].bike_want[j];
-            for(int k = 0; k < sepeda[bike].Size()-1; k++){
-                if (sepeda[bike][k].station == usr[i].src && 
-                sepeda[bike][k].available_time < usr[i].start_time
-                && sepeda[bike][k].rental_count < rental_limit
-                && sepeda[bike][k].rental_price > 0 ){
-                    
+    //    for(int i = 0; i < usr.Size()-1; i++){
+    //        cout << usr[i].id << " " << usr[i].start_time << " " << usr[i].end_time << endl;
+    //    }
+    for(int i = 0; i < usr.Size(); i++){
+        int bike_id = INT_MAX;
+        int flag = 0;
+        int revenue = 0;
+        int max_revenue = INT_MIN;
+        int final_bike;
+        double max_rental_price = INT_MIN;
+        int final_k;
+        int travel_time = map[usr[i].src][usr[i].dest];
+        
+        if(travel_time <= (usr[i].end_time -usr[i].start_time)){
+            for(int j = 0; j < usr[i].bike_want.Size(); j++){
+                int bike = usr[i].bike_want[j];
+                for(int k = 0; k < sepeda[bike].Size(); k++){
+                    if (sepeda[bike][k].station == usr[i].src 
+                    && sepeda[bike][k].available_time <= usr[i].start_time
+                    && sepeda[bike][k].rental_count < rental_limit
+                    && sepeda[bike][k].rental_price > 0
+                    && sepeda[bike][k].rental_price >= max_rental_price){
+                        if(!flag){
+                            bike_id = sepeda[bike][k].id;
+                            flag = 1;
+                            final_bike = bike;
+                            final_k = k;
+                            max_rental_price = sepeda[bike][k].rental_price;
+                        }else{
+                            if(max_rental_price == sepeda[bike][k].rental_price){
+                                if(sepeda[bike][k].id < bike_id) {
+                                    bike_id = sepeda[bike][k].id;
+                                    final_bike = bike;
+                                    final_k = k;
+                                    max_rental_price = sepeda[bike][k].rental_price;
+                                }
+                            }
+                            else {
+                                max_rental_price = sepeda[bike][k].rental_price;
+                                final_bike = bike;
+                                final_k = k;
+                                bike_id = sepeda[bike][k].id;
+                            }
+                        }
+                        
+                        revenue = travel_time * max_rental_price;
+                    }
                 }
             }
         }
+        if(flag){
+            outUser << "U" << usr[i].id << " " << flag << " " << bike_id << " " << usr[i].start_time << " " << travel_time + usr[i].start_time << " " << revenue<< endl; 
+            outTransfer << bike_id << " S" << usr[i].src << " S" << usr[i].dest << " " << usr[i].start_time << " " << travel_time + usr[i].start_time << " U" << usr[i].id << endl;
+            sepeda[final_bike][final_k].rental_price -= disc_price;
+            sepeda[final_bike][final_k].rental_count++;
+            sepeda[final_bike][final_k].station = usr[i].dest;
+            sepeda[final_bike][final_k].available_time = usr[i].start_time + travel_time;
+        }
+        else{
+            outUser << "U" << usr[i].id << " " << 0 << " " << 0 << " " << 0 << " " << 0 << " " << 0 << endl;
+        }
     }
+    vectors<Bike> final_bike;
+    for(int i = 0; i <50; i++){
+        for(int j = 0; j < sepeda[i].Size(); j++){
+            final_bike.push(sepeda[i][j]);
+        }
+    }
+   // mergeSortBike(final_bike,0,final_bike.Size()-1);
+    for(int i = 0; i < final_bike.Size(); i++){
+        outStation << "S" << final_bike[i].station << " " << final_bike[i].id << " B" << final_bike[i].type << " " << final_bike[i].rental_price << " " << final_bike[i].rental_count << endl;
+    }
+    outStation.close();
+    outTransfer.close();
+    outUser.close();
     // for(int i = 0; i <2 ;i ++){
     //     for(int j =0; j < sepeda[i].Size(); j++){
     //         cout << sepeda[i][j].type << " " <<
