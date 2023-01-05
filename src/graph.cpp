@@ -1,5 +1,7 @@
 #include "./graph.h"
-
+#include <climits>
+#include <iostream>
+#include "./user.h"
 Graph::Graph(int Vertices , int Edges){
     V = Vertices;
     E = 2*Edges; 
@@ -25,12 +27,12 @@ int minDistance(int dist[], bool sptSet[], int V)
  
     return min_index;
 }
-void printSolution(int dist[], int V)
-{
-    cout << "Vertex \t Distance from Source" << endl;
-    for (int i = 0; i < V; i++)
-        cout << i << " \t\t\t\t" << dist[i] << endl;
-}
+// void printSolution(int dist[], int V)
+// {
+//     cout << "Vertex \t Distance from Source" << endl;
+//     for (int i = 0; i < V; i++)
+//         cout << i << " \t\t\t\t" << dist[i] << endl;
+// }
 int* dijkstra(int **graph, int src, int V)
 {
     int *dist = new int(V);
@@ -63,7 +65,78 @@ int* dijkstra(int **graph, int src, int V)
                 && dist[u] + graph[u][v] < dist[v])
                 dist[v] = dist[u] + graph[u][v];
     }
- 
-    
+    //delete [] sptSet;
     return dist;
+}
+
+void floydWarshall(int ** dist, int V)
+{
+     
+    int i, j, k;
+ 
+    /* Add all vertices one by one to
+    the set of intermediate vertices.
+    ---> Before start of an iteration,
+    we have shortest distances between all
+    pairs of vertices such that the
+    shortest distances consider only the
+    vertices in set {0, 1, 2, .. k-1} as
+    intermediate vertices.
+    ----> After the end of an iteration,
+    vertex no. k is added to the set of
+    intermediate vertices and the set becomes {0, 1, 2, ..
+    k} */
+    for (k = 0; k < V; k++) {
+        // Pick all vertices as source one by one
+        for (i = 0; i < V; i++) {
+            // Pick all vertices as destination for the
+            // above picked source
+            for (j = 0; j < V; j++) {
+                // If vertex k is on the shortest path from
+                // i to j, then update the value of
+                // dist[i][j]
+                if (dist[i][j] > (dist[i][k] + dist[k][j])
+                    && (dist[k][j] != INT_MAX
+                        && dist[i][k] != INT_MAX))
+                    dist[i][j] = dist[i][k] + dist[k][j];
+            }
+        }
+    }
+ 
+    // Print the shortest distance matrix
+  //  printSolution(dist, V);
+}
+ 
+/* A utility function to print solution */
+void printSolution(int **dist, int V)
+{
+    for (int i = 0; i < V; i++) {
+        for (int j = 0; j < V; j++) {
+                cout << dist[i][j] << " ";
+        }
+        cout << endl;
+    }
+}
+void mergeUser(vectors<User> &vec, int front, int mid, int end){
+    // vectors<User> leftSubArray;
+    // vectors<User> rightSubArray;
+    // for(int i = front; i < mid + 1; i++){
+    //     leftSubArray.push(vec[i]);
+    // }
+    // for(int i = mid+1; i < end+1; i++){
+    //     rightSubArray.push(vec[i]);
+    // }
+    // int idxLeft = 0, idxRight =0;
+
+
+}
+
+void mergeSortUser(vectors<User> &vec, int front, int end){
+
+    if(front >= end) return;
+    int mid = (front + end) /2;
+    mergeSortUser(vec, mid+1, end);
+    mergeSortUser(vec, front, mid);
+    mergeUser(vec, front, mid, end);
+
 }

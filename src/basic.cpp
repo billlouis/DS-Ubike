@@ -5,7 +5,8 @@
 #include "./graph.h"
 #include <sstream>
 #include "./bike.h"
-
+#include <iostream>
+#include "./user.h"
 
 void basic(string selectedCase){
     
@@ -14,12 +15,13 @@ void basic(string selectedCase){
     int vertices_count = 0;
     int m = 1001;
     int** map = new int*[m];
-    int** djik = new int*[m];
+    
     int *bike_type_initial = new int[m];
     vectors<Bike> sepeda[50];
+    vectors<User> usr;
     for (int i = 0; i < m; i++) {
         map[i] = new int[m];
-        djik[i] = new int[m];
+        //djik[i] = new int[m];
         bike_type_initial[i] = 0;
     }
     
@@ -53,9 +55,18 @@ void basic(string selectedCase){
         vertices_count++;
     }
     else cout << "gada cok" << endl;
-    //for(int i =0; i < vertices_count; i++){
-    //    djik[i] = dijkstra(map, i, vertices_count);
-    //}
+    // int** djik = new int*[vertices_count];
+    // for(int i =0; i < vertices_count; i++){
+        
+    //    dijkstra(map, i, vertices_count);
+    //    for(int j = 0; j < vertices_count; j++){
+    //     cout << map[i][j] << " ";
+    //    }
+    //    cout << endl;
+    //    //free(djik[i]);
+    // }
+    floydWarshall(map, vertices_count);
+
     // for(int i =0; i < vertices_count; i++){
     //     for(int j = 0; j < vertices_count; j++){
     //         cout << djik[i][j] << " ";
@@ -100,20 +111,54 @@ void basic(string selectedCase){
             istringstream ss(line);
                 ss >> type >> bid >> sid >> rp >> rc;
                 sepeda[type].push(Bike(type,bid,sid,rp,rc));
-                // cout << sepeda[bid].type << " " <<
-                // sepeda[bid].station << " " <<
-                // sepeda[bid].rental_price << " " <<
-                // sepeda[bid].rental_count << " " <<
-                // endl;
-               // cout << type << " " << bid << " " << sid << " " << rp << " " << rc << endl;
+                //cout << type << " " << bid << " " << sid << " " << rp << " " << rc << endl;
         }
     }
     
-    if(users.is_open()){
-        while(getline(users,line)){
+    if (users.is_open())
+    {
+        while (getline(users, line))
+        {
+            int uid;
+            int st;
+            int et;
+            int src;
+            int dest;
+            string bike_accept;
+            for (int i = 0; i < line.length(); i++)
+                if (line[i] == 'S' || line[i] == 'U')
+                    line[i] = ' ';
+            istringstream ss(line); 
+
+            ss >> uid >> bike_accept >> st >> et >> src >> dest ;
+            User usr_temp(uid, st, et, src, dest);
+            //   cout << usr_temp.id << " " << bike_accept << " " << usr_temp.start_time << " " << usr_temp.end_time<< " " << 
+            //   usr_temp.src << " " << usr_temp.dest << endl;
+            for(int i = 0; i < bike_accept.length(); i++)
+                if(bike_accept[i] == 'B' || bike_accept[i] == ',') bike_accept[i] = ' ';
             
+            istringstream ss2(bike_accept);
+            while(getline(ss2,line,' ')){
+                istringstream ss3(line);
+                while(getline(ss3,line)){
+                int temp = stoi(line); 
+                usr_temp.bike_want.push(temp);
+                }
+            }
+            usr.push(User(uid,st,et,src,dest));
+            usr[usr.Size()-1].bike_want = usr_temp.bike_want;
         }
     }
     
+    // for(int i = 0; i <2 ;i ++){
+    //     for(int j =0; j < sepeda[i].Size(); j++){
+    //         cout << sepeda[i][j].type << " " <<
+    //             sepeda[i][j].id << " " <<
+    //             sepeda[i][j].station << " " <<
+    //             sepeda[i][j].rental_price << " " <<
+    //             sepeda[i][j].rental_count << " " <<
+    //             endl;
+    //     }
+    // }
 
 }

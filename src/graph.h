@@ -21,6 +21,7 @@ class Graph {
     
 }; 
 int* dijkstra(int **graph, int src, int V);
-void printSolution(int dist[], int V);
+void printSolution(int ** dist, int V);
+void floydWarshall(int ** dist, int V);
 int minDistance(int dist[], bool sptSet[], int V);
 #endif
