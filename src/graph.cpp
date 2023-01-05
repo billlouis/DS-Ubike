@@ -31,13 +31,12 @@ void printSolution(int dist[], int V)
     for (int i = 0; i < V; i++)
         cout << i << " \t\t\t\t" << dist[i] << endl;
 }
-void dijkstra(int **graph, int src, int V)
+int* dijkstra(int **graph, int src, int V)
 {
     int *dist = new int(V);
     bool *sptSet = new bool(V);
     for (int i = 0; i < V; i++)
         dist[i] = INT_MAX, sptSet[i] = false;
- 
     // Distance of source vertex from itself is always 0
     dist[src] = 0;
  
@@ -65,6 +64,6 @@ void dijkstra(int **graph, int src, int V)
                 dist[v] = dist[u] + graph[u][v];
     }
  
-    // print the constructed distance array
-    printSolution(dist, V);
+    
+    return dist;
 }

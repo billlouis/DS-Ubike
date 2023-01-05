@@ -20,7 +20,7 @@ class Graph {
     Edge* edge;
     
 }; 
-void dijkstra(int **graph, int src, int V);
+int* dijkstra(int **graph, int src, int V);
 void printSolution(int dist[], int V);
 int minDistance(int dist[], bool sptSet[], int V);
 #endif
