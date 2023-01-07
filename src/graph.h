@@ -28,7 +28,11 @@ void floydWarshall(int ** dist, int V);
 int minDistance(int dist[], bool sptSet[], int V);
 void mergeU(vectors<User> &vec, int front, int mid, int end);
 void mergeB(vectors<Bike> &vec, int front, int mid, int end);
+void mergeUO(vectors<User> &vec, int front, int mid, int end);
 
 void mergeSortUser(vectors<User> &vec, int front, int end);
+void mergeSortUOutput(vectors<User> &vec, int front, int end);
 void mergeSortBike(vectors<Bike> &vec, int front, int end);
+void mergeSortU2(vectors<User> &vec, int front, int end);
+void mergeU2(vectors<User> &vec, int left, int mid, int right);
 #endif

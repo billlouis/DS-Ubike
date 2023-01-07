@@ -9,7 +9,7 @@ Bike::Bike(int types, int bid, int sid, double rp, int rc){
 }
 bool Bike::rent(int start_time, int end_time, int src, int dest){
     if(available_time <= start_time){
-
+        
     }
     return true;
 }

@@ -15,6 +15,7 @@
         "xutility": "cpp",
         "type_traits": "cpp",
         "sstream": "cpp",
-        "map": "cpp"
+        "map": "cpp",
+        "xlocale": "cpp"
     }
 }

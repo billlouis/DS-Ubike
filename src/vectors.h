@@ -16,6 +16,7 @@ public :
     void push(T data);
     void setMem(ll ukuran);
     void pop();
+    void remove(int index);
     ll Size() const;
 
     T& operator[](ll);
@@ -32,7 +33,11 @@ template <class T>
 void vectors<T> :: setMem(ll ukuran){
     capacity = ukuran;
 }
-
+template <class T>
+void vectors<T> ::  remove(int index){
+    arr[index] = arr[size-1];
+    size--;
+} 
 template <class T>
 vectors<T> :: vectors(const vectors& rhs): size(rhs.size), capacity(rhs.capacity), arr(new T[capacity]){
     for(ll i = 0; i < rhs.Size(); i++){
